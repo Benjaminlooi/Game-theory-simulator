@@ -8,6 +8,9 @@ import { strategies } from "../lib/strategies";
 import { initializeGame, playRound, runGame, GameState, Player } from "../lib/game-logic";
 import { getRandomColor } from "../lib/utils";
 
+// Create a type for valid strategy names
+type StrategyName = keyof typeof strategies;
+
 const DEFAULT_MAX_ROUNDS = 100;
 const DEFAULT_PLAYERS = [
   {
@@ -39,7 +42,8 @@ const GameSimulator: React.FC = () => {
 
   const addPlayer = () => {
     const newId = Math.max(...players.map(p => p.id), 0) + 1;
-    const randomStrategy = Object.keys(strategies)[Math.floor(Math.random() * Object.keys(strategies).length)];
+    const strategyNames = Object.keys(strategies) as StrategyName[];
+    const randomStrategy = strategyNames[Math.floor(Math.random() * strategyNames.length)];
     
     setPlayers([
       ...players,
@@ -67,7 +71,7 @@ const GameSimulator: React.FC = () => {
           ? {
               ...player,
               strategyName,
-              strategy: strategies[strategyName]
+              strategy: strategies[strategyName as StrategyName]
             }
           : player
       )
